@@ -36,27 +36,27 @@ public class JoinMessageListener implements MessageListener {
     }
 
     public void processMessage(TextMessage message) throws JMSException {
-        System.out.println("Received message: " + message.getText());
-        if(message.getText().startsWith("i am join")){
-            if(!Objects.equals(message.getText().split("join")[1], node.getNodeName())) {
-                node.setActualCount(node.getActualCount() + 1);
-                node.sendJoinMessage(message.getText().split("join")[1]);
-//            }else{
-//                System.out.println("here");
-            }
-        }else{
-            if(message.getText().startsWith("SETID:")){
-                if(Objects.equals(message.getText().split(":")[2], node.getNodeName())) {
-                    node.setNodeId(Integer.parseInt(message.getText().split(":")[1]));
-                    node.setActualCount(node.getNodeId());
-                    System.out.println("Setting new nodeId = " + node.getNodeId());
-                    messageReceived = true;
+        if(!Objects.equals(message.getText().split("\\|")[0], node.getNodeName())) {
+            System.out.println("Received message: " + message.getText());
+            if (message.getText().split("\\|")[2].startsWith("JOIN")) {
+                    node.setActualCount(node.getActualCount() + 1);
+                    node.sendJoinMessage(message.getText().split("\\|")[0]);
+            } else {
+                if (message.getText().split("\\|")[2].startsWith("SETID:")) {
+                    if (Objects.equals(message.getText().split(":")[2], node.getNodeName()) &&
+                            !Objects.equals(message.getText().split(":")[1], node.getNodeId().toString())) {
+                        node.setNodeId(Integer.parseInt(message.getText().split(":")[1]));
+                        node.setActualCount(node.getNodeId());
+                        System.out.println("Setting new nodeId = " + node.getNodeId());
+                        messageReceived = true;
+                    }
+                } else {
+                    throw new JMSException("message not recognized");
                 }
-            }else{
-                throw new JMSException("message not recognized");
             }
+            System.out.println("this node id is "+node.getNodeId()+node.getNodeName());
         }
-        System.out.println("this node id is "+node.getNodeId()+node.getNodeName());
+
     }
 
 }

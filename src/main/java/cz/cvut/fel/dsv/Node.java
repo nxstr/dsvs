@@ -66,11 +66,9 @@ public class Node{
             sendJoinMessage("");
             Thread.sleep(1000);
             if (!joinListener.isMessageReceived()) {
-                // Set nodeId to 0
                 System.out.println("No messages received. Setting nodeId to 1. I am first.");
                 nodeId = 1;
                 actualCount = 1;
-                // Your logic to set nodeId to 0
             }
         } catch (JMSException e) {
             e.printStackTrace();
@@ -90,14 +88,12 @@ public class Node{
 
     public void sendJoinMessage(String name){
         try {
-//            CustomMessage message = new CustomMessage();
             TextMessage message = null;
             if(nodeId==-1) {
-                message = session.createTextMessage("i am join"+nodeName);
+                message = session.createTextMessage(nodeName+"|"+nodeId+"|JOIN");
             }else{
-                message = session.createTextMessage("SETID:"+actualCount+":"+name);
+                message = session.createTextMessage(nodeName+"|"+nodeId+"|SETID:"+actualCount+":"+name);
             }
-//            ObjectMessage m = session.createObjectMessage(message);
             topicProducerMap.get(TopicName.JOIN_TOPIC).send(message);
         }catch (JMSException e){
             e.printStackTrace();
