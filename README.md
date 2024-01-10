@@ -5,7 +5,7 @@ It is using Lamport algorithm for mutual exception for sending chat messages fro
 
 ### How to run
 
-1. Install ActiveMQ 5: https://activemq.apache.org/components/classic/download/ (depends on jdk version)
+1. Install ActiveMQ: https://activemq.apache.org/components/classic/download/ (it is strongly depends on jdk version compatibility, for example activemq 5.11 don't work correct with jdk version 17)
 2. Install maven: ```sudo apt install maven```
 3. Start ActiveMQ broker on one virtual machine: in activemq directory, run in terminal: ./bin/activemq console
 4. In project directory, run in terminal: ```mvn exec:java -Dexec.args="<NodeName> <broker ip address> (optional)<delay time>"```, where NodeName - unique string name of instance, 

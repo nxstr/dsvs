@@ -361,8 +361,8 @@ public class Node{
         for(String s: lostNodes){
             nodeTimes.remove(s);
         }
-        if(nodeTimes.size()!=currentNodeCount){
-            currentNodeCount=nodeTimes.size();
+        if(nodeTimes.size()+1!=currentNodeCount){
+            currentNodeCount=nodeTimes.size()+1;
         }
         if(isStateChanged.get()){
             if(isCritRequested){

@@ -6,13 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="8a6a4420-21c2-4eed-87ba-83f41d31d42f" name="Changes" comment="first try">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cz/cvut/fel/dsv/ChatMessageListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cz/cvut/fel/dsv/ChatMessageListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cz/cvut/fel/dsv/CritMessageListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cz/cvut/fel/dsv/CritMessageListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cz/cvut/fel/dsv/JoinMessageListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cz/cvut/fel/dsv/JoinMessageListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/app.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/app.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/cz/cvut/fel/dsv/Node.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cz/cvut/fel/dsv/Node.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cz/cvut/fel/dsv/PingMessageListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cz/cvut/fel/dsv/PingMessageListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/log4j2.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/log4j2.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,7 +50,7 @@
     &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;
   }
 }</component>
-  <component name="RunManager" selected="Application.Node A">
+  <component name="RunManager" selected="Application.Node B">
     <configuration name="Node A" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="cz.cvut.fel.dsv.Node" />
       <module name="dsvs" />

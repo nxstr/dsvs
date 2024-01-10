@@ -1918,3 +1918,104 @@
 2024-10 21:28:37 ERROR [cz.cvut.fel.dsv.Node] [handleInputCommand] - Node A: Node is not in critical section
 2024-10 21:28:44 ERROR [cz.cvut.fel.dsv.Node] [sendChatMessage] - Node A: This node is not in critical section. You cant send chat messages
 2024-10 21:28:49 INFO [cz.cvut.fel.dsv.Node] [logout] - Node A: Logging out
+2024-10 21:33:24 INFO [cz.cvut.fel.dsv.Node] [initializeJMS] - Node A: No messages received. Setting nodeId to 1. I am first.
+2024-10 21:34:54 INFO [cz.cvut.fel.dsv.JoinMessageListener] [processMessage] - Node A: JOIN_TOPIC: Received message from node B|-1|0. Message: JOIN
+2024-10 21:34:54 INFO [cz.cvut.fel.dsv.JoinMessageListener] [processMessage] - Node A: Set current node count to 1
+2024-10 21:35:55 INFO [cz.cvut.fel.dsv.JoinMessageListener] [processMessage] - Node A: JOIN_TOPIC: Received message from node B|1|0. Message: SETID:2:A:2
+2024-10 21:35:55 INFO [cz.cvut.fel.dsv.JoinMessageListener] [processMessage] - Node A: Setting new nodeId = 2
+2024-10 21:36:55 INFO [cz.cvut.fel.dsv.Node] [initializeJMS] - Node A: No messages received. Setting nodeId to 1. I am first.
+2024-10 21:37:08 INFO [cz.cvut.fel.dsv.JoinMessageListener] [processMessage] - Node A: JOIN_TOPIC: Received message from node B|-1|0. Message: JOIN
+2024-10 21:37:08 INFO [cz.cvut.fel.dsv.JoinMessageListener] [processMessage] - Node A: Set current node count to 1
+2024-10 21:37:56 INFO [cz.cvut.fel.dsv.Node] [enterCritSection] - Node A: Entering critical section
+2024-10 21:37:56 INFO [cz.cvut.fel.dsv.ChatMessageListener] [onMessage] - Node A: CHAT_TOPIC: Received message from node A|1|1. Message: Critical section is locked by node A
+2024-10 21:38:02 INFO [cz.cvut.fel.dsv.ChatMessageListener] [onMessage] - Node A: CHAT_TOPIC: Received message from node A|1|1. Message: hi
+2024-10 21:38:17 INFO [cz.cvut.fel.dsv.Node] [leaveCriticalSection] - Node A: Leaving critical section
+2024-10 21:38:21 INFO [cz.cvut.fel.dsv.ChatMessageListener] [onMessage] - Node A: CHAT_TOPIC: Received message from node B|2|1. Message: Critical section is locked by node B
+2024-10 21:38:23 INFO [cz.cvut.fel.dsv.ChatMessageListener] [onMessage] - Node A: CHAT_TOPIC: Received message from node B|2|1. Message: hi
+2024-10 21:38:32 INFO [cz.cvut.fel.dsv.CritMessageListener] [processMessage] - Node A: CRIT_TOPIC: Received message from node B|2|1. Message: LEAVE
+2024-10 21:38:32 INFO [cz.cvut.fel.dsv.CritMessageListener] [processMessage] - Node A: My logic time: 2
+2024-10 21:47:01 INFO [cz.cvut.fel.dsv.Node] [initializeJMS] - Node A: No messages received. Setting nodeId to 1. I am first.
+2024-10 21:47:14 INFO [cz.cvut.fel.dsv.JoinMessageListener] [processMessage] - Node A: JOIN_TOPIC: Received message from node B|-1|0. Message: JOIN
+2024-10 21:47:14 INFO [cz.cvut.fel.dsv.JoinMessageListener] [processMessage] - Node A: Set current node count to 1
+2024-10 21:47:23 INFO [cz.cvut.fel.dsv.Node] [enterCritSection] - Node A: Entering critical section
+2024-10 21:47:23 INFO [cz.cvut.fel.dsv.ChatMessageListener] [onMessage] - Node A: CHAT_TOPIC: Received message from node A|1|1. Message: Critical section is locked by node A
+2024-10 21:47:29 INFO [cz.cvut.fel.dsv.ChatMessageListener] [onMessage] - Node A: CHAT_TOPIC: Received message from node A|1|1. Message: hi its ok
+2024-10 21:47:37 INFO [cz.cvut.fel.dsv.ChatMessageListener] [onMessage] - Node A: CHAT_TOPIC: Received message from node B|2|1. Message: Critical section is locked by node B
+2024-10 21:47:44 INFO [cz.cvut.fel.dsv.Node] [leaveCriticalSection] - Node A: Leaving critical section
+2024-10 21:48:22 INFO [cz.cvut.fel.dsv.JoinMessageListener] [processMessage] - Node A: JOIN_TOPIC: Received message from node B|1|0. Message: SETID:2:A:2
+2024-10 21:48:22 INFO [cz.cvut.fel.dsv.JoinMessageListener] [processMessage] - Node A: Setting new nodeId = 2
+2024-10 21:48:24 INFO [cz.cvut.fel.dsv.CritMessageListener] [processMessage] - Node A: CRIT_TOPIC: Received message from node B|1|0. Message: REPLY:OK:A
+2024-10 21:48:24 INFO [cz.cvut.fel.dsv.CritMessageListener] [processMessage] - Node A: My logic time: 1
+2024-10 21:48:24 INFO [cz.cvut.fel.dsv.Node] [enterCritSection] - Node A: Entering critical section
+2024-10 21:48:24 INFO [cz.cvut.fel.dsv.ChatMessageListener] [onMessage] - Node A: CHAT_TOPIC: Received message from node A|2|2. Message: Critical section is locked by node A
+2024-10 21:48:27 INFO [cz.cvut.fel.dsv.ChatMessageListener] [onMessage] - Node A: CHAT_TOPIC: Received message from node B|1|2. Message: Critical section is locked by node B
+2024-10 21:48:30 INFO [cz.cvut.fel.dsv.ChatMessageListener] [onMessage] - Node A: CHAT_TOPIC: Received message from node B|1|2. Message: hi
+2024-10 21:48:44 INFO [cz.cvut.fel.dsv.Node] [initializeJMS] - Node A: No messages received. Setting nodeId to 1. I am first.
+2024-10 21:48:46 INFO [cz.cvut.fel.dsv.JoinMessageListener] [processMessage] - Node A: JOIN_TOPIC: Received message from node B|-1|0. Message: JOIN
+2024-10 21:48:46 INFO [cz.cvut.fel.dsv.JoinMessageListener] [processMessage] - Node A: Set current node count to 2
+2024-10 21:48:49 INFO [cz.cvut.fel.dsv.CritMessageListener] [processMessage] - Node A: CRIT_TOPIC: Received message from node B|2|0. Message: ENTER:2:0
+2024-10 21:48:49 INFO [cz.cvut.fel.dsv.CritMessageListener] [processMessage] - Node A: My logic time: 1
+2024-10 21:48:49 INFO [cz.cvut.fel.dsv.ChatMessageListener] [onMessage] - Node A: CHAT_TOPIC: Received message from node B|2|2. Message: Critical section is locked by node B
+2024-10 21:48:53 INFO [cz.cvut.fel.dsv.Node] [enterCritSection] - Node A: Entering critical section
+2024-10 21:48:53 INFO [cz.cvut.fel.dsv.ChatMessageListener] [onMessage] - Node A: CHAT_TOPIC: Received message from node A|1|2. Message: Critical section is locked by node A
+2024-10 21:49:33 INFO [cz.cvut.fel.dsv.Node] [initializeJMS] - Node A: No messages received. Setting nodeId to 1. I am first.
+2024-10 21:49:38 INFO [cz.cvut.fel.dsv.JoinMessageListener] [processMessage] - Node A: JOIN_TOPIC: Received message from node B|-1|0. Message: JOIN
+2024-10 21:49:38 INFO [cz.cvut.fel.dsv.JoinMessageListener] [processMessage] - Node A: Set current node count to 1
+2024-10 21:49:38 INFO [cz.cvut.fel.dsv.JoinMessageListener] [processMessage] - Node B: JOIN_TOPIC: Received message from node A|1|0. Message: SETID:2:B:1
+2024-10 21:49:38 INFO [cz.cvut.fel.dsv.JoinMessageListener] [processMessage] - Node B: Setting new nodeId = 2
+2024-10 21:49:40 INFO [cz.cvut.fel.dsv.Node] [enterCritSection] - Node B: Entering critical section
+2024-10 21:49:40 INFO [cz.cvut.fel.dsv.ChatMessageListener] [onMessage] - Node B: CHAT_TOPIC: Received message from node B|2|1. Message: Critical section is locked by node B
+2024-10 21:49:40 INFO [cz.cvut.fel.dsv.ChatMessageListener] [onMessage] - Node A: CHAT_TOPIC: Received message from node B|2|1. Message: Critical section is locked by node B
+2024-10 21:49:42 INFO [cz.cvut.fel.dsv.Node] [enterCritSection] - Node A: Entering critical section
+2024-10 21:49:42 INFO [cz.cvut.fel.dsv.ChatMessageListener] [onMessage] - Node A: CHAT_TOPIC: Received message from node A|1|1. Message: Critical section is locked by node A
+2024-10 21:49:42 INFO [cz.cvut.fel.dsv.ChatMessageListener] [onMessage] - Node B: CHAT_TOPIC: Received message from node A|1|1. Message: Critical section is locked by node A
+2024-10 21:52:19 INFO [cz.cvut.fel.dsv.JoinMessageListener] [processMessage] - Node A: JOIN_TOPIC: Received message from node B|1|0. Message: SETID:2:A:2
+2024-10 21:52:19 INFO [cz.cvut.fel.dsv.JoinMessageListener] [processMessage] - Node A: Setting new nodeId = 2
+2024-10 21:52:22 INFO [cz.cvut.fel.dsv.CritMessageListener] [processMessage] - Node A: CRIT_TOPIC: Received message from node B|1|0. Message: REPLY:OK:A
+2024-10 21:52:22 INFO [cz.cvut.fel.dsv.CritMessageListener] [processMessage] - Node A: My logic time: 1
+2024-10 21:52:22 INFO [cz.cvut.fel.dsv.Node] [enterCritSection] - Node A: Entering critical section
+2024-10 21:52:22 INFO [cz.cvut.fel.dsv.ChatMessageListener] [onMessage] - Node A: CHAT_TOPIC: Received message from node A|2|2. Message: Critical section is locked by node A
+2024-10 21:52:24 INFO [cz.cvut.fel.dsv.ChatMessageListener] [onMessage] - Node A: CHAT_TOPIC: Received message from node B|1|2. Message: Critical section is locked by node B
+2024-10 21:52:39 INFO [cz.cvut.fel.dsv.Node] [initializeJMS] - Node A: No messages received. Setting nodeId to 1. I am first.
+2024-10 21:52:42 INFO [cz.cvut.fel.dsv.JoinMessageListener] [processMessage] - Node A: JOIN_TOPIC: Received message from node B|-1|0. Message: JOIN
+2024-10 21:52:42 INFO [cz.cvut.fel.dsv.JoinMessageListener] [processMessage] - Node A: Set current node count to 2
+2024-10 21:52:45 INFO [cz.cvut.fel.dsv.CritMessageListener] [processMessage] - Node A: CRIT_TOPIC: Received message from node B|2|0. Message: ENTER:2:0
+2024-10 21:52:45 INFO [cz.cvut.fel.dsv.CritMessageListener] [processMessage] - Node A: My logic time: 1
+2024-10 21:52:45 INFO [cz.cvut.fel.dsv.ChatMessageListener] [onMessage] - Node A: CHAT_TOPIC: Received message from node B|2|2. Message: Critical section is locked by node B
+2024-10 21:52:48 INFO [cz.cvut.fel.dsv.CritMessageListener] [processMessage] - Node A: CRIT_TOPIC: Received message from node B|2|2. Message: REPLY:LOCKED:A
+2024-10 21:52:48 INFO [cz.cvut.fel.dsv.CritMessageListener] [processMessage] - Node A: My logic time: 2
+2024-10 21:52:48 INFO [cz.cvut.fel.dsv.CritMessageListener] [processMessage] - Node A: Critical section is locked by B
+2024-10 21:52:53 INFO [cz.cvut.fel.dsv.CritMessageListener] [processMessage] - Node A: CRIT_TOPIC: Received message from node B|2|3. Message: LEAVE
+2024-10 21:52:53 INFO [cz.cvut.fel.dsv.CritMessageListener] [processMessage] - Node A: My logic time: 2
+2024-10 21:52:53 INFO [cz.cvut.fel.dsv.CritMessageListener] [processMessage] - Node A: CRIT_TOPIC: Received message from node B|2|4. Message: REPLY:OK:A
+2024-10 21:52:53 INFO [cz.cvut.fel.dsv.CritMessageListener] [processMessage] - Node A: My logic time: 3
+2024-10 21:52:53 INFO [cz.cvut.fel.dsv.Node] [enterCritSection] - Node A: Entering critical section
+2024-10 21:52:53 INFO [cz.cvut.fel.dsv.ChatMessageListener] [onMessage] - Node A: CHAT_TOPIC: Received message from node A|1|4. Message: Critical section is locked by node A
+2024-10 21:52:56 INFO [cz.cvut.fel.dsv.CritMessageListener] [processMessage] - Node A: CRIT_TOPIC: Received message from node B|2|5. Message: ENTER:2:5
+2024-10 21:52:56 INFO [cz.cvut.fel.dsv.CritMessageListener] [processMessage] - Node A: My logic time: 5
+2024-10 21:53:05 INFO [cz.cvut.fel.dsv.Node] [initializeJMS] - Node A: No messages received. Setting nodeId to 1. I am first.
+2024-10 21:53:07 INFO [cz.cvut.fel.dsv.JoinMessageListener] [processMessage] - Node A: JOIN_TOPIC: Received message from node B|-1|0. Message: JOIN
+2024-10 21:53:07 INFO [cz.cvut.fel.dsv.JoinMessageListener] [processMessage] - Node A: Set current node count to 2
+2024-10 21:53:08 INFO [cz.cvut.fel.dsv.CritMessageListener] [processMessage] - Node A: CRIT_TOPIC: Received message from node B|2|0. Message: ENTER:2:0
+2024-10 21:53:08 INFO [cz.cvut.fel.dsv.CritMessageListener] [processMessage] - Node A: My logic time: 1
+2024-10 21:53:08 INFO [cz.cvut.fel.dsv.ChatMessageListener] [onMessage] - Node A: CHAT_TOPIC: Received message from node B|2|2. Message: Critical section is locked by node B
+2024-10 21:53:11 INFO [cz.cvut.fel.dsv.CritMessageListener] [processMessage] - Node A: CRIT_TOPIC: Received message from node B|2|2. Message: REPLY:LOCKED:A
+2024-10 21:53:11 INFO [cz.cvut.fel.dsv.CritMessageListener] [processMessage] - Node A: My logic time: 2
+2024-10 21:53:11 INFO [cz.cvut.fel.dsv.CritMessageListener] [processMessage] - Node A: Critical section is locked by B
+2024-10 21:53:16 ERROR [cz.cvut.fel.dsv.Node] [requestCriticalSection] - Node A: Request not allowed. You are already requested to enter critical section or you are in critical section now.
+2024-10 21:53:23 INFO [cz.cvut.fel.dsv.ChatMessageListener] [onMessage] - Node A: CHAT_TOPIC: Received message from node B|2|3. Message: hi
+2024-10 21:53:26 INFO [cz.cvut.fel.dsv.CritMessageListener] [processMessage] - Node A: CRIT_TOPIC: Received message from node B|2|3. Message: LEAVE
+2024-10 21:53:26 INFO [cz.cvut.fel.dsv.CritMessageListener] [processMessage] - Node A: My logic time: 2
+2024-10 21:53:26 INFO [cz.cvut.fel.dsv.CritMessageListener] [processMessage] - Node A: CRIT_TOPIC: Received message from node B|2|4. Message: REPLY:OK:A
+2024-10 21:53:26 INFO [cz.cvut.fel.dsv.CritMessageListener] [processMessage] - Node A: My logic time: 3
+2024-10 21:53:26 INFO [cz.cvut.fel.dsv.Node] [enterCritSection] - Node A: Entering critical section
+2024-10 21:53:26 INFO [cz.cvut.fel.dsv.ChatMessageListener] [onMessage] - Node A: CHAT_TOPIC: Received message from node A|1|4. Message: Critical section is locked by node A
+2024-10 21:53:34 INFO [cz.cvut.fel.dsv.ChatMessageListener] [onMessage] - Node A: CHAT_TOPIC: Received message from node A|1|4. Message: hi
+2024-10 21:53:37 INFO [cz.cvut.fel.dsv.Node] [leaveCriticalSection] - Node A: Leaving critical section
+2024-10 21:53:41 INFO [cz.cvut.fel.dsv.CritMessageListener] [processMessage] - Node A: CRIT_TOPIC: Received message from node B|2|5. Message: ENTER:2:5
+2024-10 21:53:41 INFO [cz.cvut.fel.dsv.CritMessageListener] [processMessage] - Node A: My logic time: 6
+2024-10 21:53:41 INFO [cz.cvut.fel.dsv.ChatMessageListener] [onMessage] - Node A: CHAT_TOPIC: Received message from node B|2|7. Message: Critical section is locked by node B
+2024-10 21:53:47 INFO [cz.cvut.fel.dsv.ChatMessageListener] [onMessage] - Node A: CHAT_TOPIC: Received message from node B|2|7. Message: it s me
+2024-10 21:53:50 INFO [cz.cvut.fel.dsv.CritMessageListener] [processMessage] - Node A: CRIT_TOPIC: Received message from node B|2|7. Message: REPLY:LOCKED:A
+2024-10 21:53:50 INFO [cz.cvut.fel.dsv.CritMessageListener] [processMessage] - Node A: My logic time: 7
+2024-10 21:53:50 INFO [cz.cvut.fel.dsv.CritMessageListener] [processMessage] - Node A: Critical section is locked by B
