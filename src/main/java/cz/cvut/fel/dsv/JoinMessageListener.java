@@ -29,15 +29,6 @@ public class JoinMessageListener implements MessageListener {
 
     @Override
     public void onMessage(Message message) {
-//        if (message instanceof ObjectMessage) {
-//            try {
-//                CustomMessage customMessage = (CustomMessage) ((ObjectMessage) message).getObject();
-//                processMessage(customMessage);
-//                messageReceived = true;
-//            } catch (JMSException e) {
-//                e.printStackTrace();
-//            }
-//        }
         if (message instanceof TextMessage) {
             try {
                 convertMessage((TextMessage) message);
@@ -50,25 +41,34 @@ public class JoinMessageListener implements MessageListener {
 
     public void processMessage() throws JMSException {
         if(!Objects.equals(senderName, node.getNodeName())) {
-            logger.info("JOIN_TOPIC: Received message from node " + senderName + "|" +senderId+"|"+senderLogicalTime + ". Message: "+ messageText);
+            logger.info("Node " + node.getNodeName() + ": " +"JOIN_TOPIC: Received message from node " + senderName + "|" +senderId+"|"+senderLogicalTime + ". Message: "+ messageText);
             if (messageText.startsWith("JOIN")) {
+                if(node.getNodeId()!=-1) {
                     node.setActualCount(node.getActualCount() + 1);
-                    node.setCurrentNodeCount(node.getCurrentNodeCount()+1);
-                System.out.println("Set current count " + node.getCurrentNodeCount());
+                    node.setCurrentNodeCount(node.getCurrentNodeCount() + 1);
+                    logger.info("Node " + node.getNodeName() + ": " +"Set current node count to " + node.getCurrentNodeCount());
                     node.sendJoinMessage(senderName);
-            } else if (messageText.startsWith("LOGOUT")) {
-                node.setCurrentNodeCount(node.getCurrentNodeCount()-1);
+                }
             } else {
                 if (messageText.startsWith("SETID:")) {
                     if (Objects.equals(messageText.split(":")[2], node.getNodeName())){
                         logicalTimeValues.add(senderLogicalTime);
                         if(!Objects.equals(messageText.split(":")[1], node.getNodeId().toString())) {
-                            node.setNodeId(Integer.parseInt(messageText.split(":")[1]));
-                            node.setActualCount(node.getNodeId());
-                            node.setCurrentNodeCount(Integer.parseInt(messageText.split(":")[3]));
-                            logger.info("Setting new nodeId = " + node.getNodeId());
-                            messageReceived = true;
+                            if(node.getNodeId()==-1) {
+                                node.setNodeId(Integer.parseInt(messageText.split(":")[1]));
+                                node.setActualCount(node.getNodeId());
+                                node.setCurrentNodeCount(Integer.parseInt(messageText.split(":")[3]));
+                                logger.info("Node " + node.getNodeName() + ": " +"Setting new nodeId = " + node.getNodeId());
+                                messageReceived = true;
+                            } else if (node.getNodeId()!=-1) {
+                                node.setActualCount(node.getActualCount()+1);
+                                node.setCurrentNodeCount(Integer.parseInt(messageText.split(":")[3]));
+                                node.setNodeId(node.getNodeId()+1);
+                                node.sendActualizeMessage(senderName);
+                                logger.info("Node " + node.getNodeName() + ": " +"I updated data: id = "+node.getNodeId()+", actualCount = "+node.getActualCount()+", nodeCurrentCount = "+node.getCurrentNodeCount());
+                            }
                         }
+                        node.updateTime(senderName);
                         if(logicalTimeValues.size()==node.getCurrentNodeCount()-1){
                             double d = logicalTimeValues.stream()
                                     .mapToDouble(a -> a)
@@ -77,11 +77,17 @@ public class JoinMessageListener implements MessageListener {
                             logicalTimeValues.clear();
                         }
                     }
+                } else if (messageText.startsWith("ACTUALIZE:")) {
+                    if(!Objects.equals(senderName, node.getNodeName())){
+                        node.setActualCount(Integer.parseInt(messageText.split(":")[1]));
+                        node.setCurrentNodeCount(Integer.parseInt(messageText.split(":")[3]));
+                        node.updateTime(senderName);
+                        logger.info("Node " + node.getNodeName() + ": " +"It seems that network has problems, node's data werent actual. Actualizing... actualCount = " + node.getActualCount() + ", currentNodeCount = " + node.getCurrentNodeCount());
+                    }
                 } else {
                     throw new JMSException("message not recognized");
                 }
             }
-//            logger.info("This node id is "+node.getNodeId()+node.getNodeName());
         }
 
     }

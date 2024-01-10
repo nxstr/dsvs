@@ -25,13 +25,8 @@ public class ChatMessageListener implements MessageListener {
         if (message instanceof TextMessage) {
             try {
                 convertMessage((TextMessage) message);
-//                if(!Objects.equals(senderName, node.getNodeName())) {
-                logger.info("CHAT_TOPIC: Received message from node " + senderName + "|" + senderRequestId + "|" + senderRequestLogicalTime + ". Message: " + messageText);
-//                System.out.println("CHAT_TOPIC: Received message from node " + senderName + "|" + senderRequestId + "|" + senderRequestLogicalTime + ". Message: " + messageText);
-//                System.out.println("------------------------");
+                logger.info("Node " + node.getNodeName() + ": " +"CHAT_TOPIC: Received message from node " + senderName + "|" + senderRequestId + "|" + senderRequestLogicalTime + ". Message: " + messageText);
                 System.out.println("CHAT#### "+senderName+":"+messageText);
-//                System.out.println("------------------------");
-//                }
             } catch (JMSException e) {
                 e.printStackTrace();
             }

@@ -43,21 +43,21 @@ public class CritMessageListener implements MessageListener {
     public void processMessage() throws JMSException {
         if(node.isNodesLost()){
             positiveReplies=0;
+            isDenied = false;
             node.setNodesLost(false);
         }
         if(!Objects.equals(senderName, node.getNodeName())) {
             if (messageText.startsWith("ENTER")) {
                 requestLogicalTime = Integer.parseInt(messageText.split(":")[2]);
                 node.processEnterCritRequest(senderName, senderId, requestLogicalTime);
-                logger.info("CRIT_TOPIC: Received message from node " + senderName + "|" +senderId + "|" + senderLogicalTime + ". Message: "+ messageText);
-                logger.info("Node " + node.getNodeName() + " logic time: "+node.getNodeLogicalTime());
+                logger.info("Node " + node.getNodeName() + ": " +"CRIT_TOPIC: Received message from node " + senderName + "|" +senderId + "|" + senderLogicalTime + ". Message: "+ messageText);
+                logger.info("Node " + node.getNodeName() + ": " +"My logic time: "+node.getNodeLogicalTime());
             } else if(messageText.startsWith("REPLY")){
                 if(messageText.split(":")[1].equals("OK")){
                     if(messageText.split(":")[2].equals(node.getNodeName())){
-                        logger.info("CRIT_TOPIC: Received message from node " + senderName + "|" +senderId + "|" + senderLogicalTime + ". Message: "+ messageText);
-                        logger.info("Node " + node.getNodeName() + " logic time: "+node.getNodeLogicalTime());
+                        logger.info("Node " + node.getNodeName() + ": " +"CRIT_TOPIC: Received message from node " + senderName + "|" +senderId + "|" + senderLogicalTime + ". Message: "+ messageText);
+                        logger.info("Node " + node.getNodeName() + ": " +"My logic time: "+node.getNodeLogicalTime());
                         positiveReplies++;
-                        System.out.println(positiveReplies + " counts " + node.getCurrentNodeCount());
                         if(!isDenied && positiveReplies.equals(node.getCurrentNodeCount()-1)){
                             node.enterCritSection();
                             isDenied = false;
@@ -66,24 +66,24 @@ public class CritMessageListener implements MessageListener {
                     }
                 } else if (messageText.split(":")[1].equals("LOCKED")) {
                     if(messageText.split(":")[2].equals(node.getNodeName())){
-                        logger.info("CRIT_TOPIC: Received message from node " + senderName + "|" +senderId + "|" + senderLogicalTime + ". Message: "+ messageText);
-                        logger.info("Node " + node.getNodeName() + " logic time: "+node.getNodeLogicalTime());
-                        logger.info("Critical section is locked by "+senderName);
+                        logger.info("Node " + node.getNodeName() + ": " +"CRIT_TOPIC: Received message from node " + senderName + "|" +senderId + "|" + senderLogicalTime + ". Message: "+ messageText);
+                        logger.info("Node " + node.getNodeName() + ": " +"My logic time: "+node.getNodeLogicalTime());
+                        logger.info("Node " + node.getNodeName() + ": " +"Critical section is locked by "+senderName);
                         isDenied = true;
                         positiveReplies = 0;
                     }
                 } else if (messageText.split(":")[1].equals("NO")) {
                     if(messageText.split(":")[4].equals(node.getNodeName())){
-                        logger.info("CRIT_TOPIC: Received message from node " + senderName + "|" +senderId + "|" + senderLogicalTime + ". Message: "+ messageText);
-                        logger.info("Node " + node.getNodeName() + " logic time: "+node.getNodeLogicalTime());
+                        logger.info("Node " + node.getNodeName() + ": " +"CRIT_TOPIC: Received message from node " + senderName + "|" +senderId + "|" + senderLogicalTime + ". Message: "+ messageText);
+                        logger.info("Node " + node.getNodeName() + ": " +"My logic time: "+node.getNodeLogicalTime());
                         isDenied = true;
                         positiveReplies = 0;
-                        logger.info("There is earlier request from node " + senderName + ". It has RLT " + messageText.split(":")[3]);
+                        logger.info("Node " + node.getNodeName() + ": " +"There is earlier request from node " + senderName + ". It has RLT " + messageText.split(":")[3] + ", and it has Id " + senderId);
                     }
                 }
             } else if (messageText.startsWith("LEAVE")) {
-                logger.info("CRIT_TOPIC: Received message from node " + senderName + "|" +senderId + "|" + senderLogicalTime + ". Message: "+ messageText);
-                logger.info("Node " + node.getNodeName() + " logic time: "+node.getNodeLogicalTime());
+                logger.info("Node " + node.getNodeName() + ": " +"CRIT_TOPIC: Received message from node " + senderName + "|" +senderId + "|" + senderLogicalTime + ". Message: "+ messageText);
+                logger.info("Node " + node.getNodeName() + ": " +"My logic time: "+node.getNodeLogicalTime());
                 if(node.isCritRequested()){
                     isDenied = false;
                     positiveReplies = 0;

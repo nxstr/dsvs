@@ -26,17 +26,23 @@ public class Node{
     private Topic joinTopic;
     private Topic pingTopic;
     private Topic critRequestTopic;
-
     private HashMap<String, MessageProducer> topicProducerMap = new HashMap<>();
     private HashMap<String, MessageConsumer> topicConsumerMap = new HashMap<>();
+
+    private final String brokerIpAddress;
     @Getter
     private boolean isCritRequested;
+    @Getter
+    @Setter
+    public boolean isNodeInCrit;
     @Getter
     @Setter
     private Integer nodeLogicalTime;
     @Getter
     @Setter
     private Integer nodeId;
+    @Getter
+    private String nodeName;
     @Getter
     @Setter
     private Integer actualCount;
@@ -47,27 +53,26 @@ public class Node{
     private RequestDetails actualRequest;
 
     @Getter
-    private String nodeName;
-
-    @Getter
     @Setter
-    public boolean isNodeInCrit;
-
     private Map<String, Instant> nodeTimes = new HashMap<>();
-
-    private ScheduledExecutorService heartbeatExecutor;
-    
-    private ScheduledExecutorService pingMonitor;
     @Getter
     @Setter
     private boolean isNodesLost = false;
-
-    private final String brokerIpAddress;
-
+    private ScheduledExecutorService pingExecutor;
+    private ScheduledExecutorService pingMonitor;
+    @Getter
+    private Integer delayTime = 0;
 
     public Node(String[] args) {
+        if(args.length!=2 && args.length!=3){
+            logger.error("Node " + nodeName + ": " +"Configuration must have at least 2 parameters: <nodeName> <brokerIpAddress> (optional)<delayTimeInSeconds>");
+            System.exit(1);
+        }
         nodeName = args[0];
         brokerIpAddress = args[1];
+        if(args.length==3) {
+            delayTime = Integer.valueOf(args[2]);
+        }
         nodeId = -1;
         actualCount = -1;
         currentNodeCount = -1;
@@ -116,9 +121,10 @@ public class Node{
             pingConsumer.setMessageListener(pingListener);
 
             sendJoinMessage("");
-            Thread.sleep(1000);
+            Thread.sleep(delayTime*1000+1000);
+
             if (!joinListener.isMessageReceived()) {
-                logger.info("No messages received. Setting nodeId to 1. I am first.");
+                logger.info("Node " + nodeName + ": " +"No messages received. Setting nodeId to 1. I am first.");
                 nodeId = 1;
                 actualCount = 1;
                 currentNodeCount = 1;
@@ -148,15 +154,27 @@ public class Node{
                     continue;
                 }
                 String input = scanner.nextLine();
-                if ("-ce".equals(input)) {
-                    thisNode.requestCriticalSection();
-                } else if (input.startsWith("-m")) {
-                    thisNode.sendChatMessage(input.split(":")[1]);
-                }else if("-cl".equals(input)){
-                    thisNode.leaveCriticalSection();
-                }else if("-logout".equals(input)){
-                    thisNode.logout();
-                    break;
+                if(thisNode.getNodeId()!=-1) {
+                    if ("-ce".equals(input)) {
+                        if(!thisNode.isNodeInCrit) {
+                            thisNode.requestCriticalSection();
+                        }else{
+                            logger.error("Node " + thisNode.getNodeName() + ": "+"Node is already in critical section");
+                        }
+                    } else if (input.startsWith("-m")) {
+                        thisNode.sendChatMessage(input.split(":")[1]);
+                    } else if ("-cl".equals(input)) {
+                        if(thisNode.isNodeInCrit) {
+                            thisNode.leaveCriticalSection();
+                        }else{
+                            logger.error("Node " + thisNode.getNodeName() + ": "+"Node is not in critical section");
+                        }
+                    } else if ("-logout".equals(input)) {
+                        thisNode.logout();
+                        System.exit(1);
+                    }
+                }else{
+                    logger.info("Node " + thisNode.getNodeName() + ": " +"Node is joining chat now. Please wait.");
                 }
             }
         } catch (InterruptedException e) {
@@ -170,12 +188,13 @@ public class Node{
             TextMessage message = null;
             if(nodeId==-1) {
                 message = session.createTextMessage(nodeName+"|"+nodeId+"|"+nodeLogicalTime+"|JOIN");
-                startPinging();
             }else{
                 message = session.createTextMessage(nodeName+"|"+nodeId+"|"+nodeLogicalTime+"|SETID:"+actualCount+":"+name+":"+currentNodeCount);
             }
+            Thread.sleep(delayTime*1000);
             topicProducerMap.get(TopicName.JOIN_TOPIC).send(message);
-        }catch (JMSException e){
+            startPinging();
+        }catch (JMSException | InterruptedException e){
             e.printStackTrace();
         }
     }
@@ -189,9 +208,8 @@ public class Node{
             }else {
                 sendEnterCritMessage();
             }
-//            Thread.sleep(1000);
         }else{
-            logger.error("Request not allowed. You are already requested to enter critical section or you are in critical section now.");
+            logger.error("Node " + nodeName + ": " +"Request not allowed. You are already requested to enter critical section or you are in critical section now.");
         }
     }
 
@@ -202,18 +220,19 @@ public class Node{
             actualRequest = null;
             sendLeaveCritMessage();
             nodeLogicalTime++;
-            logger.info("Leaving critical section");
+            logger.info("Node " + nodeName + ": " +"Leaving critical section");
         }else{
-            logger.error("Request not allowed. You are not in critical section now.");
+            logger.error("Node " + nodeName + ": " +"Request not allowed. You are not in critical section now.");
         }
     }
 
     public void sendEnterCritMessage(){
         try {
             TextMessage message = session.createTextMessage(nodeName+"|"+nodeId+"|"+nodeLogicalTime+"|ENTER:"+actualRequest.getNodeId()+":"+actualRequest.getNodeLogicalTime());
+            Thread.sleep(delayTime*1000);
             topicProducerMap.get(TopicName.CRIT_TOPIC).send(message);
             nodeLogicalTime++;
-        }catch (JMSException e){
+        }catch (JMSException | InterruptedException e){
             e.printStackTrace();
         }
     }
@@ -221,8 +240,9 @@ public class Node{
     public void sendLeaveCritMessage(){
         try {
             TextMessage message = session.createTextMessage(nodeName+"|"+nodeId+"|"+nodeLogicalTime+"|LEAVE");
+            Thread.sleep(delayTime*1000);
             topicProducerMap.get(TopicName.CRIT_TOPIC).send(message);
-        }catch (JMSException e){
+        }catch (JMSException | InterruptedException e){
             e.printStackTrace();
         }
     }
@@ -230,8 +250,9 @@ public class Node{
     public void sendCritReply(String text){
         try {
             TextMessage message = session.createTextMessage(nodeName+"|"+nodeId+"|"+nodeLogicalTime+"|REPLY:"+text);
+            Thread.sleep(delayTime*1000);
             topicProducerMap.get(TopicName.CRIT_TOPIC).send(message);
-        }catch (JMSException e){
+        }catch (JMSException | InterruptedException e){
             e.printStackTrace();
         }
     }
@@ -264,7 +285,7 @@ public class Node{
         isCritRequested = false;
         actualRequest = null;
         nodeLogicalTime++;
-        logger.info("Entering critical section");
+        logger.info("Node " + nodeName + ": " +"Entering critical section");
         sendChatMessage("Critical section is locked by node "+nodeName);
     }
 
@@ -272,12 +293,13 @@ public class Node{
         if(isNodeInCrit){
             try {
                 TextMessage message = session.createTextMessage(nodeName+"|"+nodeId+"|"+nodeLogicalTime+"|"+text);
+                Thread.sleep(delayTime*1000);
                 topicProducerMap.get(TopicName.CHAT_TOPIC).send(message);
-            }catch (JMSException e){
+            }catch (JMSException | InterruptedException e){
                 e.printStackTrace();
             }
         }else{
-            logger.error("You are not in critical section. You cant send chat messages");
+            logger.error("Node " + nodeName + ": " +"This node is not in critical section. You cant send chat messages");
         }
     }
 
@@ -285,14 +307,13 @@ public class Node{
         try {
             if(isNodeInCrit){
                 leaveCriticalSection();
+                Thread.sleep(1000);
             } else if (isCritRequested) {
                 isCritRequested = false;
                 actualRequest = null;
             }
-            TextMessage message = session.createTextMessage(nodeName+"|"+nodeId+"|"+nodeLogicalTime+"|LOGOUT");
-            topicProducerMap.get(TopicName.JOIN_TOPIC).send(message);
-            logger.info("Logging out");
-            topicProducerMap.entrySet().forEach((entry)->
+            logger.info("Node " + nodeName + ": " +"Logging out");
+            topicConsumerMap.entrySet().forEach((entry)->
             {
                 try {
                     entry.getValue().close();
@@ -300,7 +321,7 @@ public class Node{
                     e.printStackTrace();
                 }
             });
-            topicConsumerMap.entrySet().forEach((entry)->
+            topicProducerMap.entrySet().forEach((entry)->
             {
                 try {
                     entry.getValue().close();
@@ -310,7 +331,7 @@ public class Node{
             });
             session.close();
             connection.close();
-            heartbeatExecutor.shutdown();
+            pingExecutor.shutdown();
             pingMonitor.shutdown();
         }catch (JMSException | InterruptedException e){
             e.printStackTrace();
@@ -319,15 +340,10 @@ public class Node{
 
 
     public void startPinging(){
-        heartbeatExecutor = Executors.newSingleThreadScheduledExecutor();
-//        Runnable task1 = () -> {
-//            System.out.println("Executing the task1 at: " + LocalTime.now());
-//        };
-
-        heartbeatExecutor.scheduleAtFixedRate(this::sendPingMessage, 0, 20, TimeUnit.SECONDS);
+        pingExecutor = Executors.newSingleThreadScheduledExecutor();
+        pingExecutor.scheduleAtFixedRate(this::sendPingMessage, 0, 20, TimeUnit.SECONDS);
         pingMonitor = Executors.newSingleThreadScheduledExecutor();
         pingMonitor.scheduleAtFixedRate(this::checkPings, 5, 10, TimeUnit.SECONDS);
-
     }
 
     private void checkPings() {
@@ -335,15 +351,18 @@ public class Node{
         AtomicBoolean isStateChanged = new AtomicBoolean(false);
         nodeTimes.entrySet().forEach((entry)->
         {
-            if (Duration.between(entry.getValue(), Instant.now()).getSeconds() > 30) {
+            if (Duration.between(entry.getValue(), Instant.now()).getSeconds() > 40) {
                 currentNodeCount--;
                 lostNodes.add(entry.getKey());
-                logger.info("Node " + entry.getKey() + " seems to die. Updating currentNodeCount = " + currentNodeCount);
+                logger.info("Node " + nodeName + ": " +"Node " + entry.getKey() + " seems to die. Updating currentNodeCount = " + currentNodeCount);
                 isStateChanged.set(true);
             }
             });
         for(String s: lostNodes){
             nodeTimes.remove(s);
+        }
+        if(nodeTimes.size()!=currentNodeCount){
+            currentNodeCount=nodeTimes.size();
         }
         if(isStateChanged.get()){
             if(isCritRequested){
@@ -365,13 +384,22 @@ public class Node{
         }
     }
 
-
-
     public void sendPingMessage(){
         try {
-            TextMessage message = session.createTextMessage(nodeName+"|"+nodeId+"|"+nodeLogicalTime+"|PING");
+            TextMessage message = session.createTextMessage(nodeName+"|PING");
+            Thread.sleep(delayTime*1000);
             topicProducerMap.get(TopicName.PING_TOPIC).send(message);
-        }catch (JMSException e){
+        }catch (JMSException | InterruptedException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void sendActualizeMessage(String name){
+        try {
+            TextMessage message = session.createTextMessage(nodeName+"|"+nodeId+"|"+nodeLogicalTime+"|ACTUALIZE:"+actualCount+":"+name+":"+currentNodeCount);
+            Thread.sleep(delayTime*1000);
+            topicProducerMap.get(TopicName.JOIN_TOPIC).send(message);
+        }catch (JMSException | InterruptedException e){
             e.printStackTrace();
         }
     }
