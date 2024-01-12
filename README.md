@@ -5,12 +5,26 @@ It is using Lamport algorithm for mutual exception for sending chat messages fro
 
 ### How to run
 
+Application is prepared for two running brokers on different virtual machines
+
 1. Install ActiveMQ: https://activemq.apache.org/components/classic/download/ (it is strongly depends on jdk version compatibility, for example activemq 5.11 don't work correct with jdk version 17)
 2. Install maven: ```sudo apt install maven```
+3. Select two vm, where you want brokers to run. Go to activemq package, file ```/conf/activemq.xml``` you need to change broker name:
+ in line ```<broker xmlns="http://activemq.apache.org/schema/core" brokerName="broker1" dataDirectory="${activemq.data}">``` set unique broker name for each broker.
+4. Next, in section broker add code, so it will look like that:
+```
+<broker ...>
+    ...
+    <networkConnectors>
+        <networkConnector name="bridge" uri="static:(tcp://<ip address of another broker>:61616)" duplex="false"/>
+    </networkConnectors>
+    ...
+</broker>
+```
 3. Start ActiveMQ broker on one virtual machine: in activemq directory, run in terminal: ./bin/activemq console
-4. In project directory, run in terminal: ```mvn exec:java -Dexec.args="<NodeName> <broker ip address> (optional)<delay time>"```, where NodeName - unique string name of instance, 
+4. In project directory, run in terminal: ```mvn exec:java -Dexec.args="<NodeName> <first broker ip address> <second broker ip address> (optional)<delay time>"```, where NodeName - unique string name of instance, 
 broker ip address (writes as "0.0.0.0") - in my pc it is private IP address of virtual machine where broker runs, delay time - optional Integer parameter in seconds, if you want instance to have delay 
-Example: ```mvn exec:java -Dexec.args="A 192.168.56.101"```
+Example: ```mvn exec:java -Dexec.args="A 192.168.56.101 192.168.56.102"```
 
 ### Console commands
 

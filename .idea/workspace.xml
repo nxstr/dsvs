@@ -6,7 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="8a6a4420-21c2-4eed-87ba-83f41d31d42f" name="Changes" comment="first try">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/logs/app.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/app.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/cz/cvut/fel/dsv/Node.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cz/cvut/fel/dsv/Node.java" afterDir="false" />
     </list>
@@ -37,24 +36,24 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/dsv/Desktop/nxstr/dsvs&quot;,
-    &quot;onboarding.tips.debug.path&quot;: &quot;/home/dsv/Desktop/dsvs/src/main/java/cz/cvut/fel/dsv/Main.java&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "/home/dsv/apache-activemq-6.0.1/conf/activemq.xml",
+    "onboarding.tips.debug.path": "/home/dsv/Desktop/dsvs/src/main/java/cz/cvut/fel/dsv/Main.java",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.0"
   }
-}</component>
-  <component name="RunManager" selected="Application.Node B">
+}]]></component>
+  <component name="RunManager" selected="Application.Node A">
     <configuration name="Node A" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="cz.cvut.fel.dsv.Node" />
       <module name="dsvs" />
-      <option name="PROGRAM_PARAMETERS" value="A 192.168.56.101" />
+      <option name="PROGRAM_PARAMETERS" value="A 192.168.56.101 192.168.56.102" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>

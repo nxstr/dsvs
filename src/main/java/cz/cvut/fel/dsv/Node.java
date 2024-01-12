@@ -29,7 +29,9 @@ public class Node{
     private HashMap<String, MessageProducer> topicProducerMap = new HashMap<>();
     private HashMap<String, MessageConsumer> topicConsumerMap = new HashMap<>();
 
-    private final String brokerIpAddress;
+    private final String broker1IpAddress;
+
+    private final String broker2IpAddress;
     @Getter
     private boolean isCritRequested;
     @Getter
@@ -64,14 +66,15 @@ public class Node{
     private Integer delayTime = 0;
 
     public Node(String[] args) {
-        if(args.length!=2 && args.length!=3){
-            logger.error("Node " + nodeName + ": " +"Configuration must have at least 2 parameters: <nodeName> <brokerIpAddress> (optional)<delayTimeInSeconds>");
+        if(args.length!=3 && args.length!=4){
+            logger.error("Node " + nodeName + ": " +"Configuration must have at least 3 parameters: <nodeName> <firstBrokerIpAddress> <secondBrokerIpAddress> (optional)<delayTimeInSeconds>");
             System.exit(1);
         }
         nodeName = args[0];
-        brokerIpAddress = args[1];
-        if(args.length==3) {
-            delayTime = Integer.valueOf(args[2]);
+        broker1IpAddress = args[1];
+        broker2IpAddress = args[2];
+        if(args.length==4) {
+            delayTime = Integer.valueOf(args[3]);
         }
         nodeId = -1;
         actualCount = -1;
@@ -85,7 +88,7 @@ public class Node{
 
     private void initializeJMS(){
         try{
-            connectionFactory = new ActiveMQConnectionFactory("tcp://"+brokerIpAddress+":61616");
+            connectionFactory = new ActiveMQConnectionFactory("failover:(tcp://"+broker1IpAddress+":61616,tcp://"+broker2IpAddress+":61616)");
             connection = connectionFactory.createConnection();
             connection.start();
             session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
